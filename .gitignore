@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+# Next.js
+frontend/.next/
+frontend/out/
+# Env files (NEVER commit these)
+**/.env
+**/.env.local
+**/.env*.local
+# Logs
+*.log
+npm-debug.log*
+# macOS
+.DS_Store
+.vercel
+.env*.local
