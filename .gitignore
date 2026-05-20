@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Deployment scripts (contain server credentials — keep local only)
+deploy.exp
+start.sh
+
 # Next.js
 frontend/.next/
 frontend/out/
