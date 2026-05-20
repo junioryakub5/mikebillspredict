@@ -19,7 +19,7 @@ function BetSlipImage({ src, alt }: { src: string; alt: string }) {
           type="button"
           onClick={() => setOpen(true)}
           className="relative w-full rounded-xl overflow-hidden group cursor-zoom-in"
-          style={{ height: "120px", background: "#f7f7f8", border: "1px solid rgba(0,0,0,0.06)" }}
+          style={{ height: "120px", background: "var(--bg-elevated)", border: "1px solid var(--border)" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src} alt={alt} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110" />
@@ -29,7 +29,7 @@ function BetSlipImage({ src, alt }: { src: string; alt: string }) {
           >
             <span
               className="text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5"
-              style={{ background: "#ff3c00", color: "#ffffff" }}
+              style={{ background: "#6366f1", color: "#ffffff" }}
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
               View Full Slip
@@ -49,7 +49,7 @@ function BetSlipImage({ src, alt }: { src: string; alt: string }) {
           <button
             onClick={() => setOpen(false)}
             className="fixed top-4 right-4 text-white rounded-full w-10 h-10 flex items-center justify-center z-[10000]"
-            style={{ background: "rgba(255,60,0,0.9)" }}
+            style={{ background: "rgba(99,102,241,0.9)" }}
           >
             <X size={18} />
           </button>
@@ -116,10 +116,10 @@ interface Props {
 
 // ── Accent colours per odds category ─────────────────────────────────────────
 const ACCENT: Record<string, { bg: string; text: string; glow: string; border: string }> = {
-  "2+":  { bg: "rgba(255,60,0,0.06)",   text: "#ff3c00", glow: "rgba(255,60,0,0.15)",  border: "rgba(255,60,0,0.15)" },
-  "5+":  { bg: "rgba(245,158,11,0.06)",  text: "#f59e0b", glow: "rgba(245,158,11,0.15)", border: "rgba(245,158,11,0.15)" },
-  "10+": { bg: "rgba(124,58,237,0.06)",  text: "#7c3aed", glow: "rgba(124,58,237,0.15)", border: "rgba(124,58,237,0.15)" },
-  "20+": { bg: "rgba(239,68,68,0.06)",   text: "#ef4444", glow: "rgba(239,68,68,0.15)",  border: "rgba(239,68,68,0.15)" },
+  "2+":  { bg: "rgba(99,102,241,0.1)",   text: "#818cf8", glow: "rgba(99,102,241,0.25)",  border: "rgba(99,102,241,0.25)" },
+  "5+":  { bg: "rgba(34,211,238,0.08)",  text: "#22d3ee", glow: "rgba(34,211,238,0.2)",   border: "rgba(34,211,238,0.2)" },
+  "10+": { bg: "rgba(234,179,8,0.08)",   text: "#eab308", glow: "rgba(234,179,8,0.2)",    border: "rgba(234,179,8,0.2)" },
+  "20+": { bg: "rgba(167,139,250,0.08)", text: "#a78bfa", glow: "rgba(167,139,250,0.2)",  border: "rgba(167,139,250,0.2)" },
 };
 
 // ── Exchange rate: 1 GHS → NGN (update as needed) ────────────────────────────
@@ -191,20 +191,20 @@ function CountrySelectModal({
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
         className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
-        style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)" }}
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-hover)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Accent strip */}
         <div className="h-1 w-full" style={{ background: acc.text }} />
 
         {/* Header */}
-        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-semibold text-base" style={{ color: "#111827" }}>Choose your country</h2>
-              <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>Select to continue with payment</p>
+              <h2 className="font-semibold text-base" style={{ color: "var(--text-primary)" }}>Choose your country</h2>
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Select to continue with payment</p>
             </div>
-            <button onClick={onClose} style={{ color: "#9ca3af" }}><X size={18} /></button>
+            <button onClick={onClose} style={{ color: "var(--text-muted)" }}><X size={18} /></button>
           </div>
         </div>
 
@@ -214,13 +214,13 @@ function CountrySelectModal({
           <button
             onClick={onGhana}
             className="w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all duration-200 active:scale-[0.98]"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.08)" }}
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
             <div className="flex items-center gap-3">
               <span className="text-2xl">🇬🇭</span>
               <div className="text-left">
-                <p className="font-semibold text-sm" style={{ color: "#111827" }}>Ghana</p>
-                <p className="text-xs" style={{ color: "#9ca3af" }}>GHS {prediction.price} — Mobile Money / Card</p>
+                <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>Ghana</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>GHS {prediction.price} — Mobile Money / Card</p>
               </div>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
@@ -230,13 +230,13 @@ function CountrySelectModal({
           <button
             onClick={onNigeria}
             className="w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all duration-200 active:scale-[0.98]"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.08)" }}
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
             <div className="flex items-center gap-3">
               <span className="text-2xl">🇳🇬</span>
               <div className="text-left">
-                <p className="font-semibold text-sm" style={{ color: "#111827" }}>Nigeria</p>
-                <p className="text-xs" style={{ color: "#9ca3af" }}>₦{ngn.toLocaleString()} — Bank Transfer</p>
+                <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>Nigeria</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>₦{ngn.toLocaleString()} — Bank Transfer</p>
               </div>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
@@ -248,7 +248,7 @@ function CountrySelectModal({
           <button
             onClick={onClose}
             className="w-full py-3 text-sm font-medium rounded-2xl transition-all"
-            style={{ background: "#f3f4f6", color: "#6b7280" }}
+            style={{ background: "var(--bg-elevated)", color: "var(--text-secondary)" }}
           >
             Cancel
           </button>
@@ -412,7 +412,7 @@ function PaymentModal({
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
         <div
           className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl flex flex-col items-center justify-center gap-5 py-14 px-8"
-          style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)" }}
+          style={{ background: "var(--bg-card)", border: "1px solid var(--border-hover)" }}
         >
           <div className="h-1 w-full absolute top-0 left-0" style={{ background: acc.text }} />
           <div
@@ -422,8 +422,8 @@ function PaymentModal({
             <Loader2 size={28} style={{ color: acc.text }} className="animate-spin" />
           </div>
           <div className="text-center">
-            <p className="font-semibold text-base mb-1" style={{ color: "#111827" }}>Verifying Payment…</p>
-            <p className="text-xs" style={{ color: "#9ca3af" }}>Confirming with Paystack and unlocking your prediction</p>
+            <p className="font-semibold text-base mb-1" style={{ color: "var(--text-primary)" }}>Verifying Payment…</p>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>Confirming with Paystack and unlocking your prediction</p>
           </div>
         </div>
       </div>
@@ -436,14 +436,14 @@ function PaymentModal({
 
       <div
         className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
-        style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)" }}
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-hover)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Accent strip */}
         <div className="h-1 w-full" style={{ background: acc.text }} />
 
         {/* Header */}
-        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="flex items-start justify-between gap-3">
             <div>
               <span
@@ -452,28 +452,28 @@ function PaymentModal({
               >
                 {prediction.oddsCategory} ODDS
               </span>
-              <h2 className="font-semibold text-base leading-snug" style={{ color: "#111827" }}>{prediction.match}</h2>
-              <p className="text-xs mt-0.5 flex items-center gap-1.5" style={{ color: "#9ca3af" }}>
+              <h2 className="font-semibold text-base leading-snug" style={{ color: "var(--text-primary)" }}>{prediction.match}</h2>
+              <p className="text-xs mt-0.5 flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
                 <Calendar size={11} />
                 {new Date(prediction.date).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}
                 {" · "}{prediction.league}
               </p>
             </div>
-            <button onClick={onClose} className="transition-colors mt-0.5 flex-shrink-0" style={{ color: "#9ca3af" }}>
+            <button onClick={onClose} className="transition-colors mt-0.5 flex-shrink-0" style={{ color: "var(--text-muted)" }}>
               <X size={18} />
             </button>
           </div>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="flex" style={{ borderBottom: "1px solid var(--border)" }}>
           {(["pay", "restore"] as ModalTab[]).map((t) => (
             <button
               key={t}
               onClick={() => { setTab(t); setError(""); setRestoreError(""); }}
               className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold transition-all duration-200`}
               style={{
-                color: tab === t ? "#111827" : "#9ca3af",
+                color: tab === t ? "var(--text-primary)" : "var(--text-muted)",
                 borderBottom: tab === t ? `2px solid ${acc.text}` : "2px solid transparent",
               }}
             >
@@ -492,13 +492,13 @@ function PaymentModal({
               style={{ background: acc.bg, border: `1px solid ${acc.border}` }}
             >
               <div>
-                <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Access Price</p>
-                <p className="text-2xl font-bold" style={{ color: "#111827" }}>
+                <p className="text-xs mb-0.5" style={{ color: "var(--text-muted)" }}>Access Price</p>
+                <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
                   GHS <span style={{ color: acc.text }}>{prediction.price}</span>
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Total Odds</p>
+                <p className="text-xs mb-0.5" style={{ color: "var(--text-muted)" }}>Total Odds</p>
                 <p className="font-bold text-lg" style={{ color: acc.text }}>{prediction.odds}</p>
               </div>
             </div>
@@ -507,14 +507,14 @@ function PaymentModal({
             <div className="px-6 mb-4 flex gap-5">
               {[{ icon: <Shield size={12} />, label: "Secure payment" }, { icon: <Zap size={12} />, label: "Instant access" }]
                 .map(f => (
-                  <div key={f.label} className="flex items-center gap-1.5 text-xs" style={{ color: "#9ca3af" }}>{f.icon}{f.label}</div>
+                  <div key={f.label} className="flex items-center gap-1.5 text-xs" style={{ color: "var(--text-muted)" }}>{f.icon}{f.label}</div>
                 ))}
             </div>
 
             {/* Form */}
             <div className="px-6 pb-6 space-y-3">
               <div>
-                <label className="block text-xs font-medium mb-1.5" style={{ color: "#6b7280" }}>Your email address</label>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Your email address</label>
                 <input
                   type="email" placeholder="you@example.com" value={email} autoFocus
                   onChange={(e) => setEmail(e.target.value)}
@@ -528,16 +528,16 @@ function PaymentModal({
                 onClick={handlePay} disabled={step === "paying"}
                 className="w-full flex items-center justify-center gap-2 font-bold text-sm py-3.5 rounded-2xl transition-all duration-300 active:scale-[0.97]"
                 style={{
-                  background: step === "paying" ? "rgba(255,60,0,0.4)" : "#ff3c00",
+                  background: step === "paying" ? "rgba(99,102,241,0.4)" : "var(--brand)",
                   color: "#ffffff",
-                  boxShadow: step === "paying" ? "none" : "0 4px 16px rgba(255,60,0,0.25)",
+                  boxShadow: step === "paying" ? "none" : "0 4px 16px var(--brand-glow)",
                 }}
               >
                 {step === "paying"
                   ? (<><Loader2 size={16} className="animate-spin" />Opening Paystack…</>)
                   : (<><Lock size={15} />Pay &amp; Unlock — GHS {prediction.price}</>)}
               </button>
-              <p className="text-center text-[11px]" style={{ color: "#d1d5db" }}>
+              <p className="text-center text-[11px]" style={{ color: "var(--text-muted)" }}>
                 One-time payment · Powered by Paystack
               </p>
             </div>
@@ -550,12 +550,12 @@ function PaymentModal({
               style={{ background: "rgba(124,58,237,0.04)", border: "1px solid rgba(124,58,237,0.1)" }}
             >
               <Mail size={16} className="flex-shrink-0 mt-0.5" style={{ color: "#7c3aed" }} />
-              <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
+              <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                 Already paid for this prediction? Enter the email you used and we&apos;ll restore your access instantly — no need to pay again.
               </p>
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: "#6b7280" }}>Email used at payment</label>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Email used at payment</label>
               <input
                 type="email" placeholder="you@example.com" value={restoreEmail} autoFocus
                 onChange={(e) => setRestoreEmail(e.target.value)}
@@ -578,7 +578,7 @@ function PaymentModal({
                 ? (<><Loader2 size={16} className="animate-spin" />Checking…</>)
                 : (<><RefreshCcw size={15} />Restore My Access</>)}
             </button>
-            <p className="text-center text-[11px]" style={{ color: "#d1d5db" }}>
+            <p className="text-center text-[11px]" style={{ color: "var(--text-muted)" }}>
               One-time payment — access never expires
             </p>
           </div>
@@ -633,14 +633,14 @@ function NigeriaPaymentModal({
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
         className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
-        style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)" }}
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-hover)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Accent strip */}
         <div className="h-1 w-full" style={{ background: acc.text }} />
 
         {/* Header */}
-        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div
@@ -650,11 +650,11 @@ function NigeriaPaymentModal({
                 🏦
               </div>
               <div>
-                <h2 className="font-semibold text-sm" style={{ color: "#111827" }}>Bank Transfer Details</h2>
-                <p className="text-xs" style={{ color: "#9ca3af" }}>Nigeria — OPay Transfer</p>
+                <h2 className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>Bank Transfer Details</h2>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>Nigeria — OPay Transfer</p>
               </div>
             </div>
-            <button onClick={onClose} style={{ color: "#9ca3af" }}><X size={18} /></button>
+            <button onClick={onClose} style={{ color: "var(--text-muted)" }}><X size={18} /></button>
           </div>
         </div>
 
@@ -664,9 +664,9 @@ function NigeriaPaymentModal({
           style={{ background: acc.bg, border: `1px solid ${acc.border}` }}
         >
           <div>
-            <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Amount to Pay</p>
+            <p className="text-xs mb-0.5" style={{ color: "var(--text-muted)" }}>Amount to Pay</p>
             <p className="text-2xl font-bold" style={{ color: acc.text }}>₦{ngn.toLocaleString()}</p>
-            <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>≈ GHS {prediction.price}</p>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>≈ GHS {prediction.price}</p>
           </div>
           <span className="text-3xl">🇳🇬</span>
         </div>
@@ -675,25 +675,25 @@ function NigeriaPaymentModal({
         <div className="px-6 mt-4 space-y-2.5">
           <div
             className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Bank</span>
-            <span className="text-sm font-semibold" style={{ color: "#111827" }}>OPAY / PAYCOM</span>
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>Bank</span>
+            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>OPAY / PAYCOM</span>
           </div>
           <div
             className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Account Name</span>
-            <span className="text-sm font-semibold text-right" style={{ color: "#111827", maxWidth: "60%" }}>Agbalalah Oyakemeagbeigha</span>
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>Account Name</span>
+            <span className="text-sm font-semibold text-right" style={{ color: "var(--text-primary)", maxWidth: "60%" }}>Agbalalah Oyakemeagbeigha</span>
           </div>
           <div
             className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Account Number</span>
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>Account Number</span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold tracking-wider" style={{ color: "#111827", fontFamily: "monospace" }}>6118783926</span>
+              <span className="text-sm font-bold tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "monospace" }}>6118783926</span>
               <button
                 onClick={copyAccount}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg font-medium transition-all"
@@ -715,7 +715,7 @@ function NigeriaPaymentModal({
           style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.15)" }}
         >
           <span className="text-base flex-shrink-0">ℹ️</span>
-          <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             After payment, send proof of transfer to our Telegram support for instant activation.
           </p>
         </div>
@@ -723,11 +723,11 @@ function NigeriaPaymentModal({
         {/* Actions */}
         <div className="px-6 py-5 space-y-2.5">
           <a
-            href="https://t.me/boom25vip"
+            href="https://t.me/mikebillspredict"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 font-bold text-sm py-3.5 rounded-2xl transition-all duration-300"
-            style={{ background: "#ff3c00", color: "#ffffff", boxShadow: "0 4px 16px rgba(255,60,0,0.25)", display: "flex" }}
+            style={{ background: "var(--brand)", color: "#ffffff", boxShadow: "0 4px 16px var(--brand-glow)", display: "flex" }}
           >
             <ExternalLink size={15} />
             Contact Support on Telegram
@@ -735,7 +735,7 @@ function NigeriaPaymentModal({
           <button
             onClick={onClose}
             className="w-full py-3 text-sm font-medium rounded-2xl transition-all"
-            style={{ background: "#f3f4f6", color: "#6b7280" }}
+            style={{ background: "var(--bg-elevated)", color: "var(--text-secondary)" }}
           >
             Close
           </button>
@@ -810,8 +810,8 @@ function UnlockedCard({ prediction, unlocked }: { prediction: Prediction; unlock
 
       {/* Info */}
       <div className="px-5 pt-4">
-        <h3 className="font-semibold text-base mb-0.5 line-clamp-1" style={{ color: "#111827" }}>{prediction.match}</h3>
-        <p className="text-xs mb-4 flex items-center gap-1.5" style={{ color: "#9ca3af" }}>
+        <h3 className="font-semibold text-base mb-0.5 line-clamp-1" style={{ color: "var(--text-primary)" }}>{prediction.match}</h3>
+        <p className="text-xs mb-4 flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
           <Calendar size={11} />
           {new Date(prediction.date).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}
           {" · "}{prediction.league}
@@ -833,7 +833,7 @@ function UnlockedCard({ prediction, unlocked }: { prediction: Prediction; unlock
               <button
                 onClick={copyCode}
                 className="flex items-center gap-1 text-xs transition-colors"
-                style={{ color: "#9ca3af" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 {copied ? <><Check size={11} style={{ color: "#10b981" }} />Copied!</> : <><Copy size={11} />Copy</>}
               </button>
@@ -850,12 +850,12 @@ function UnlockedCard({ prediction, unlocked }: { prediction: Prediction; unlock
         {/* Tips list */}
         {unlocked.tips && unlocked.tips.length > 0 && (
           <div className="mb-4 space-y-1.5">
-            <p className="text-xs font-medium mb-2" style={{ color: "#9ca3af" }}>What to bet:</p>
+            <p className="text-xs font-medium mb-2" style={{ color: "var(--text-muted)" }}>What to bet:</p>
             {unlocked.tips.map((tip, i) => (
               <div
                 key={i}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs"
-                style={{ background: "#f7f7f8", border: "1px solid rgba(0,0,0,0.04)", color: "#374151" }}
+                style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
               >
                 <CheckCircle size={11} style={{ color: "#10b981" }} className="flex-shrink-0" />
                 {tip}
@@ -865,7 +865,7 @@ function UnlockedCard({ prediction, unlocked }: { prediction: Prediction; unlock
         )}
 
         {/* Permanent access */}
-        <p className="text-[10px] text-right flex items-center justify-end gap-1 pb-4" style={{ color: "#d1d5db" }}>
+        <p className="text-[10px] text-right flex items-center justify-end gap-1 pb-4" style={{ color: "var(--text-muted)" }}>
           <CheckCircle size={10} style={{ color: "#10b981" }} />
           One-time payment · Access never expires
         </p>
@@ -889,12 +889,12 @@ function LockedCard({
 
   return (
     <div
-      className="card-glass overflow-hidden opacity-0 animate-fadeInUp cursor-pointer group"
+      className="card-glass overflow-hidden opacity-0 animate-fade-in-up cursor-pointer group"
       style={{ animationDelay: `${animationDelay}ms`, animationFillMode: "forwards" }}
       onClick={onClickUnlock}
     >
       {/* Image / locked area */}
-      <div className="relative h-52 overflow-hidden" style={{ background: "#f7f7f8" }}>
+      <div className="relative h-52 overflow-hidden" style={{ background: "var(--bg-elevated)" }}>
         {hasImage ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
@@ -907,7 +907,7 @@ function LockedCard({
           <div
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(135deg, ${acc.bg} 0%, #f7f7f8 100%)`,
+              background: `linear-gradient(135deg, ${acc.bg} 0%, var(--bg-elevated) 100%)`,
             }}
           />
         )}
@@ -917,8 +917,8 @@ function LockedCard({
           className="absolute inset-0"
           style={{
             background: hasImage
-              ? "linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.8) 100%)"
-              : "linear-gradient(180deg, transparent 0%, rgba(247,247,248,0.6) 100%)",
+              ? "linear-gradient(180deg, rgba(8,12,20,0.1) 0%, rgba(8,12,20,0.75) 100%)"
+              : "linear-gradient(180deg, transparent 0%, rgba(22,33,58,0.5) 100%)",
           }}
         />
 
@@ -926,7 +926,7 @@ function LockedCard({
         <span
           className="absolute top-3 left-3 z-10 text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm"
           style={{
-            background: "#ffffff",
+            background: "var(--bg-card)",
             color: acc.text,
             border: `1px solid ${acc.border}`,
           }}
@@ -939,7 +939,7 @@ function LockedCard({
           <div
             className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 md:group-hover:scale-110 shadow-lg"
             style={{
-              background: "#ffffff",
+              background: "var(--bg-elevated)",
               border: `1px solid ${acc.border}`,
             }}
           >
@@ -956,8 +956,8 @@ function LockedCard({
 
       {/* Card info */}
       <div className="px-5 py-4">
-        <h3 className="font-semibold text-base mb-1 line-clamp-1" style={{ color: "#111827" }}>{prediction.match}</h3>
-        <div className="flex items-center gap-1.5 text-xs mb-3" style={{ color: "#9ca3af" }}>
+        <h3 className="font-semibold text-base mb-1 line-clamp-1" style={{ color: "var(--text-primary)" }}>{prediction.match}</h3>
+        <div className="flex items-center gap-1.5 text-xs mb-3" style={{ color: "var(--text-muted)" }}>
           <Calendar size={12} />
           <span>
             {new Date(prediction.date).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}
@@ -966,10 +966,10 @@ function LockedCard({
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Odds:</span>
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>Odds:</span>
             <span className="font-bold text-sm" style={{ color: acc.text }}>{prediction.odds}</span>
           </div>
-          <span className="font-bold text-lg" style={{ color: "#ff3c00" }}>GHS {prediction.price}</span>
+          <span className="font-bold text-lg" style={{ color: "var(--brand)" }}>GHS {prediction.price}</span>
         </div>
 
         {/* CTA bar */}
@@ -1023,7 +1023,7 @@ export default function PredictionCard({ prediction, animationDelay = 0 }: Props
   if (unlocked) {
     return (
       <div
-        className="opacity-0 animate-fadeInUp"
+        className="opacity-0 animate-fade-in-up"
         style={{ animationDelay: `${animationDelay}ms`, animationFillMode: "forwards" }}
       >
         <UnlockedCard prediction={prediction} unlocked={unlocked} />

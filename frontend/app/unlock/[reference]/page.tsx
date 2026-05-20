@@ -68,7 +68,7 @@ export default function UnlockPage() {
               </button>
             </div>
           ) : data ? (
-            <div className="animate-fadeInUp">
+            <div className="animate-fade-in-up">
               {/* Success Header */}
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5 relative">

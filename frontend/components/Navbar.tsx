@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X, TrendingUp } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,13 +17,8 @@ export default function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50"
-      style={{
-        background: "rgba(255,255,255,0.92)",
-        backdropFilter: "saturate(180%) blur(20px)",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-      }}
+      className="fixed top-0 left-0 right-0 z-50 glass-surface"
+      style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
     >
       <div className="page-container">
         <div className="flex items-center justify-between h-16">
@@ -32,21 +27,21 @@ export default function Navbar() {
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
               style={{
-                background: "rgba(255,60,0,0.08)",
-                border: "1px solid rgba(255,60,0,0.15)",
+                background: "var(--brand-dim)",
+                border: "1px solid var(--brand-border)",
               }}
             >
-              <Zap size={17} style={{ color: "#ff3c00" }} strokeWidth={2.5} />
+              <TrendingUp size={17} style={{ color: "var(--brand)" }} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col leading-none">
               <span
                 className="font-display font-bold tracking-tight"
-                style={{ fontSize: "1.15rem", letterSpacing: "-0.02em", color: "#111827" }}
+                style={{ fontSize: "1.15rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
               >
-                <span>Boom</span>
-                <span style={{ color: "#ff3c00" }}>Tips25</span>
+                <span>Mike Bills</span>
+                <span style={{ color: "var(--brand)" }}> Predict</span>
               </span>
-              <span className="text-[9px] tracking-widest uppercase" style={{ color: "#9ca3af" }}>
+              <span className="text-[9px] tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
                 Premium Picks
               </span>
             </div>
@@ -68,7 +63,11 @@ export default function Navbar() {
           {/* Mobile Toggle */}
           <button
             className="md:hidden p-2 transition-colors rounded-xl"
-            style={{ color: "#6b7280", background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.06)" }}
+            style={{
+              color: "var(--text-secondary)",
+              background: "var(--bg-elevated)",
+              border: "1px solid var(--border)",
+            }}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -83,8 +82,8 @@ export default function Navbar() {
           mobileOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
         }`}
         style={{
-          background: "rgba(255,255,255,0.98)",
-          borderTop: "1px solid rgba(0,0,0,0.06)",
+          background: "rgba(13,18,32,0.98)",
+          borderTop: "1px solid var(--border)",
         }}
       >
         <div className="page-container py-4 flex flex-col gap-4">

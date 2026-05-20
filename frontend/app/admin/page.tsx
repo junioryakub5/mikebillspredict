@@ -32,17 +32,18 @@ type Section = "overview" | "slips" | "payments";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
-    active: "bg-amber-100 text-amber-700 border-amber-200",
-    completed: "bg-indigo-100 text-indigo-700 border-indigo-200",
-    success: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    pending: "bg-amber-100 text-amber-700 border-amber-200",
-    failed: "bg-red-100 text-red-700 border-red-200",
-    win: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    loss: "bg-red-100 text-red-700 border-red-200",
+  const styles: Record<string, React.CSSProperties> = {
+    active:    { background: "rgba(234,179,8,0.1)",    color: "#eab308",  border: "1px solid rgba(234,179,8,0.25)" },
+    completed: { background: "var(--brand-dim)",        color: "var(--brand)", border: "1px solid var(--brand-border)" },
+    success:   { background: "var(--green-dim)",        color: "var(--green)", border: "1px solid rgba(34,197,94,0.2)" },
+    pending:   { background: "rgba(234,179,8,0.1)",    color: "#eab308",  border: "1px solid rgba(234,179,8,0.25)" },
+    failed:    { background: "var(--red-dim)",          color: "var(--red)",   border: "1px solid rgba(239,68,68,0.2)" },
+    win:       { background: "var(--green-dim)",        color: "var(--green)", border: "1px solid rgba(34,197,94,0.2)" },
+    loss:      { background: "var(--red-dim)",          color: "var(--red)",   border: "1px solid rgba(239,68,68,0.2)" },
   };
+  const s = styles[status] ?? { background: "var(--bg-elevated)", color: "var(--text-muted)", border: "1px solid var(--border)" };
   return (
-    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${colors[status] ?? "bg-gray-100 text-gray-600 border-gray-200"}`}>
+    <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={s}>
       {status}
     </span>
   );
@@ -64,7 +65,7 @@ function Pagination({ page, pages, onPage }: { page: number; pages: number; onPa
         className="admin-btn-ghost flex items-center gap-1 disabled:opacity-40">
         <ChevronLeft size={15} /> Previous
       </button>
-      <span className="text-sm text-gray-500">Page {page} of {pages}</span>
+      <span className="text-sm" style={{ color: "var(--text-muted)" }}>Page {page} of {pages}</span>
       <button onClick={() => onPage(page + 1)} disabled={page >= pages}
         className="admin-btn-ghost flex items-center gap-1 disabled:opacity-40">
         Next <ChevronRight size={15} />
@@ -86,7 +87,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
     setLoading(true); setError("");
     try {
       await adminGetPredictions(token.trim());
-      sessionStorage.setItem("bt_admin_token", token.trim());
+      sessionStorage.setItem("mb_admin_token", token.trim());
       onLogin(token.trim());
     } catch {
       setError("Invalid admin token. Access denied.");
@@ -96,9 +97,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{
-        background: "#ffffff",
-      }}
+      style={{ background: "var(--bg-base)" }}
     >
       <div className="w-full max-w-sm">
         {/* Brand */}
@@ -107,11 +106,11 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto"
               style={{
-                background: "rgba(255,60,0,0.06)",
-                border: "1px solid rgba(255,60,0,0.12)",
+                background: "rgba(99,102,241,0.06)",
+                border: "1px solid rgba(99,102,241,0.12)",
               }}
             >
-              <Zap size={28} style={{ color: "#ff3c00" }} strokeWidth={2} />
+              <Zap size={28} style={{ color: "#6366f1" }} strokeWidth={2} />
             </div>
           </span>
           <h1
@@ -121,15 +120,15 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
               fontWeight: 700,
               fontSize: "2rem",
               letterSpacing: "-0.03em",
-              color: "#111827",
+              color: "var(--text-primary)",
             }}
           >
             Admin{" "}
-            <span style={{ background: "linear-gradient(135deg, #ff3c00, #ff6633)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <span style={{ background: "linear-gradient(135deg, #6366f1, #ff6633)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Access
             </span>
           </h1>
-          <p className="text-sm" style={{ color: "#9ca3af" }}>Enter your admin token to continue</p>
+          <p className="text-sm" style={{ color: "var(--text-muted)" }}>Enter your admin token to continue</p>
         </div>
 
         {/* Card */}
@@ -137,15 +136,15 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
           onSubmit={handleSubmit}
           className="space-y-4 p-6 rounded-2xl"
           style={{
-            background: "#ffffff",
-            border: "1px solid rgba(0,0,0,0.08)",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-hover)",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
           }}
         >
           <div>
             <label
               className="block text-xs font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(255,60,0,0.6)", fontFamily: "'Sora', sans-serif" }}
+              style={{ color: "rgba(99,102,241,0.6)", fontFamily: "'Sora', sans-serif" }}
             >
               Admin Token
             </label>
@@ -158,20 +157,20 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
                 autoFocus
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all duration-200 pr-10"
                 style={{
-                  background: "#ffffff",
-                  border: "1.5px solid rgba(0,0,0,0.1)",
-                  caretColor: "#ff3c00",
-                  color: "#111827",
+                  background: "var(--bg-surface)",
+                  border: "1.5px solid var(--border)",
+                  caretColor: "var(--brand)",
+                  color: "var(--text-primary)",
                 }}
-                onFocus={e => { e.target.style.borderColor = "#ff3c00"; e.target.style.boxShadow = "0 0 0 3px rgba(255,60,0,0.08)"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(0,0,0,0.1)"; e.target.style.boxShadow = "none"; }}
+                onFocus={e => { e.target.style.borderColor = "var(--brand)"; e.target.style.boxShadow = "0 0 0 3px var(--brand-dim)"; }}
+                onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
               />
               <button
                 type="button"
                 onClick={() => setShow(!show)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                 style={{ color: "#9ca3af" }}
-                onMouseEnter={e => ((e.target as HTMLElement).style.color = "#ff3c00")}
+                onMouseEnter={e => ((e.target as HTMLElement).style.color = "#6366f1")}
                 onMouseLeave={e => ((e.target as HTMLElement).style.color = "#9ca3af")}
               >
                 {show ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -190,13 +189,13 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
             disabled={loading}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl transition-all duration-300 active:scale-[0.97]"
             style={{
-              background: loading ? "rgba(255,60,0,0.4)" : "#ff3c00",
+              background: loading ? "rgba(99,102,241,0.4)" : "#6366f1",
               color: "#ffffff",
               fontFamily: "'Sora', sans-serif",
               fontWeight: 700,
               fontSize: "0.9rem",
               letterSpacing: "0.02em",
-              boxShadow: loading ? "none" : "0 4px 16px rgba(255,60,0,0.25)",
+              boxShadow: loading ? "none" : "0 4px 16px rgba(99,102,241,0.25)",
             }}
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : null}
@@ -204,8 +203,8 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
           </button>
         </form>
 
-        <p className="text-center text-gray-600 text-xs mt-6">
-          BoomTips25 · Admin Portal
+        <p className="text-center text-xs mt-6" style={{ color: "var(--text-muted)" }}>
+          Mike Bills Predict · Admin Portal
         </p>
       </div>
     </div>
@@ -226,10 +225,10 @@ function OverviewSection({ token }: { token: string }) {
 
   if (loading) return (
     <div className="flex items-center justify-center py-24">
-      <Loader2 size={32} className="animate-spin" style={{ color: "#ff3c00" }} />
+      <Loader2 size={32} className="animate-spin" style={{ color: "#6366f1" }} />
     </div>
   );
-  if (!stats) return <div className="text-gray-500 py-24 text-center">Failed to load stats.</div>;
+  if (!stats) return <div className="py-24 text-center" style={{ color: "var(--text-muted)" }}>Failed to load stats.</div>;
 
   const statCards = [
     { label: "Total Slips", value: stats.totalSlips, icon: FileText, color: "text-orange-600" },
@@ -245,10 +244,10 @@ function OverviewSection({ token }: { token: string }) {
         {statCards.map(s => (
           <div key={s.label} className="admin-card p-5">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-gray-500 text-sm">{s.label}</span>
+              <span className="text-sm" style={{ color: "var(--text-muted)" }}>{s.label}</span>
               <s.icon size={20} className={s.color} />
             </div>
-            <div style={{ color: "#111827" }} className="text-2xl font-bold">{s.value}</div>
+             <div className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{s.value}</div>
           </div>
         ))}
       </div>
@@ -259,63 +258,63 @@ function OverviewSection({ token }: { token: string }) {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Globe2 size={18} className="text-green-400" />
-              <h3 style={{ color: "#111827" }} className="font-semibold">Ghana Payments</h3>
+               <h3 className="font-semibold" style={{ color: "var(--text-primary)" }}>Ghana Payments</h3>
             </div>
             <DollarSign size={18} className="text-green-400" />
           </div>
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-500">Revenue:</span>
+             <span style={{ color: "var(--text-muted)" }}>Revenue:</span>
             <span className="text-green-400 font-bold">GHS {stats.totalRevenue.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Sales:</span>
-            <span style={{ color: "#111827" }} className="font-semibold">{stats.totalSales}</span>
+             <span style={{ color: "var(--text-muted)" }}>Sales:</span>
+             <span className="font-semibold" style={{ color: "var(--text-primary)" }}>{stats.totalSales}</span>
           </div>
         </div>
         <div className="admin-card p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <BarChart2 size={18} style={{ color: "#ff3c00" }} />
-              <h3 style={{ color: "#111827" }} className="font-semibold">Slip Overview</h3>
+              <BarChart2 size={18} style={{ color: "#6366f1" }} />
+               <h3 className="font-semibold" style={{ color: "var(--text-primary)" }}>Slip Overview</h3>
             </div>
-            <FileText size={18} style={{ color: "#ff3c00" }} />
+            <FileText size={18} style={{ color: "#6366f1" }} />
           </div>
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-500">Active:</span>
-            <span style={{ color: "#ff3c00" }} className="font-bold">{stats.activeSlips}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Completed:</span>
-            <span className="text-gray-600 font-semibold">{stats.completedSlips}</span>
+             <span style={{ color: "var(--text-muted)" }}>Active:</span>
+             <span className="font-bold" style={{ color: "var(--brand)" }}>{stats.activeSlips}</span>
+           </div>
+           <div className="flex justify-between text-sm">
+             <span style={{ color: "var(--text-muted)" }}>Completed:</span>
+             <span className="font-semibold" style={{ color: "var(--text-secondary)" }}>{stats.completedSlips}</span>
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
       <div className="admin-card overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-200">
-          <h3 style={{ color: "#111827" }} className="font-semibold">Recent Activity</h3>
+         <div className="px-5 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+           <h3 className="font-semibold" style={{ color: "var(--text-primary)" }}>Recent Activity</h3>
         </div>
         {stats.recentActivity.length === 0 ? (
-          <div className="py-12 text-center text-gray-400 text-sm">No payment activity yet.</div>
+           <div className="py-12 text-center text-sm" style={{ color: "var(--text-muted)" }}>No payment activity yet.</div>
         ) : (
-          <div className="divide-y divide-gray-100">
-            {stats.recentActivity.map(act => (
-              <div key={act._id} className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors">
+           <div style={{ borderTop: "1px solid var(--border)" }}>
+             {stats.recentActivity.map(act => (
+               <div key={act._id} className="flex items-center justify-between px-5 py-3.5 transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-700">
+                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "var(--brand-dim)", color: "var(--brand)" }}>
                     {act.email[0].toUpperCase()}
                   </div>
                   <div>
-                    <p style={{ color: "#374151" }} className="text-sm font-medium">{act.email}</p>
-                    <p className="text-gray-400 text-xs">{act.predictionTitle}</p>
+                     <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{act.email}</p>
+                     <p className="text-xs" style={{ color: "var(--text-muted)" }}>{act.predictionTitle}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className={`text-sm font-bold ${act.status === "success" ? "text-green-400" : "text-red-400"}`}>
                     {act.currency} {act.amount}
                   </p>
-                  <p className="text-gray-400 text-xs">{act.status}</p>
+                   <p className="text-xs" style={{ color: "var(--text-muted)" }}>{act.status}</p>
                 </div>
               </div>
             ))}
@@ -404,12 +403,13 @@ function SlipModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div
-        className="relative w-full max-w-xl bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]"
+        className="relative w-full max-w-xl rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]"
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-hover)" }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h2 style={{ color: "#111827" }} className="font-bold text-lg">{editing ? "Edit Slip" : "Add New Slip"}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors"><X size={20} /></button>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+          <h2 className="font-bold text-lg" style={{ color: "var(--text-primary)" }}>{editing ? "Edit Slip" : "Add New Slip"}</h2>
+          <button onClick={onClose} className="transition-colors" style={{ color: "var(--text-muted)" }}><X size={20} /></button>
         </div>
 
         <form onSubmit={e => { e.preventDefault(); onSave(form); }} className="p-6 space-y-4">
@@ -706,7 +706,7 @@ function ManageSlipsSection({ token }: { token: string }) {
       <div className="admin-card overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <Loader2 size={28} className="animate-spin" style={{ color: "#ff3c00" }} />
+            <Loader2 size={28} className="animate-spin" style={{ color: "#6366f1" }} />
           </div>
         ) : paginated.length === 0 ? (
           <div className="py-16 text-center">
@@ -723,7 +723,7 @@ function ManageSlipsSection({ token }: { token: string }) {
               {paginated.map(slip => (
                 <div key={slip._id} className="px-4 py-4 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
-                    <p style={{ color: "#111827" }} className="text-sm font-semibold truncate">{slip.match}</p>
+            <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{slip.match}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <OddsBadge cat={slip.oddsCategory} />
                       <span className="text-gray-500 text-xs">GHS {slip.price}</span>
@@ -759,16 +759,16 @@ function ManageSlipsSection({ token }: { token: string }) {
                 <thead>
                   <tr className="border-b border-gray-200">
                     {["Title", "Odds", "Price", "Status", "Purchases", "Actions"].map(h => (
-                      <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                      <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/30">
                   {paginated.map(slip => (
-                    <tr key={slip._id} className="hover:bg-gray-50/30 transition-colors">
+                    <tr key={slip._id} className="transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
                       <td className="px-5 py-4 text-sm font-medium max-w-[220px] truncate">{slip.match}</td>
                       <td className="px-5 py-4"><OddsBadge cat={slip.oddsCategory} /></td>
-                      <td className="px-5 py-4 text-gray-600 text-sm">GHS {slip.price}</td>
+                      <td className="px-5 py-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>GHS {slip.price}</td>
                       <td className="px-5 py-4"><StatusBadge status={slip.status} /></td>
                       <td className="px-5 py-4 text-gray-500 text-sm">0</td>
                       <td className="px-5 py-4">
@@ -872,10 +872,10 @@ function PaymentsSection({ token }: { token: string }) {
       <div className="admin-card overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <Loader2 size={28} className="animate-spin" style={{ color: "#ff3c00" }} />
+            <Loader2 size={28} className="animate-spin" style={{ color: "#6366f1" }} />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-16 text-center text-gray-400 text-sm">No payments found.</div>
+           <div className="py-16 text-center text-sm" style={{ color: "var(--text-muted)" }}>No payments found.</div>
         ) : (
           <>
             {/* Mobile card list */}
@@ -905,32 +905,32 @@ function PaymentsSection({ token }: { token: string }) {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    {["Customer", "Slip", "Reference", "Amount", "Status", "Date"].map(h => (
-                      <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                   <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                     {["Customer", "Slip", "Reference", "Amount", "Status", "Date"].map(h => (
+                       <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/30">
-                  {filtered.map(pmt => (
-                    <tr key={pmt._id} className="hover:bg-gray-50/30 transition-colors">
+                   {filtered.map(pmt => (
+                     <tr key={pmt._id} className="transition-colors" style={{ borderBottom: "1px solid var(--border)" }}>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-700">
+                          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "var(--brand-dim)", color: "var(--brand)" }}>
                             {pmt.email[0].toUpperCase()}
                           </div>
-                          <span className="text-gray-700 text-sm">{pmt.email}</span>
+                          <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{pmt.email}</span>
                         </div>
                       </td>
-                      <td className="px-5 py-4 text-gray-600 text-sm max-w-[160px] truncate">{pmt.predictionTitle}</td>
-                      <td className="px-5 py-4 text-gray-400 text-xs font-mono">{pmt.reference}</td>
+                       <td className="px-5 py-4 text-sm max-w-[160px] truncate" style={{ color: "var(--text-secondary)" }}>{pmt.predictionTitle}</td>
+                       <td className="px-5 py-4 text-xs font-mono" style={{ color: "var(--text-muted)" }}>{pmt.reference}</td>
                       <td className="px-5 py-4">
                         <span className={`font-bold text-sm ${pmt.status === "success" ? "text-green-400" : "text-red-400"}`}>
                           {pmt.currency} {pmt.amount}
                         </span>
                       </td>
                       <td className="px-5 py-4"><StatusBadge status={pmt.status} /></td>
-                      <td className="px-5 py-4 text-gray-400 text-xs">
+                       <td className="px-5 py-4 text-xs" style={{ color: "var(--text-muted)" }}>
                         {new Date(pmt.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                       </td>
                     </tr>
@@ -976,7 +976,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
       <div className="px-5 py-5 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <div>
           <div style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "1.1rem", letterSpacing: "-0.02em", color: "#111827" }}>
-            Boom<span style={{ color: "#ff3c00" }}>Tips25</span>
+            Boom<span style={{ color: "#6366f1" }}>Tips25</span>
           </div>
           <div className="text-xs mt-0.5" style={{ color: "#9ca3af", fontFamily: "'Sora', sans-serif", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>Admin Panel</div>
         </div>
@@ -997,9 +997,9 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
             onClick={() => goTo(item.id)}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150"
             style={section === item.id ? {
-              background: "rgba(255,60,0,0.06)",
-              color: "#ff3c00",
-              border: "1px solid rgba(255,60,0,0.12)",
+              background: "rgba(99,102,241,0.06)",
+              color: "#6366f1",
+              border: "1px solid rgba(99,102,241,0.12)",
               fontFamily: "'Sora', sans-serif",
               fontWeight: 600,
               letterSpacing: "0.02em",
@@ -1034,7 +1034,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
   );
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row" style={{ background: "#f7f7f8" }}>
+    <div className="min-h-screen flex flex-col md:flex-row" style={{ background: "var(--bg-base)" }}>
 
       {/* ── Mobile drawer overlay ── */}
       {drawerOpen && (
@@ -1047,7 +1047,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
       {/* ── Mobile drawer ── */}
       <div
         className={`fixed top-0 left-0 h-full z-50 flex flex-col w-72 transition-transform duration-300 md:hidden ${drawerOpen ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ background: "#ffffff", borderRight: "1px solid rgba(0,0,0,0.06)" }}
+        style={{ background: "var(--bg-surface)", borderRight: "1px solid var(--border)" }}
       >
         <SidebarContent />
       </div>
@@ -1055,7 +1055,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
       {/* ── Desktop sidebar ── */}
       <aside
         className="hidden md:flex w-56 flex-shrink-0 flex-col"
-        style={{ background: "#ffffff", borderRight: "1px solid rgba(0,0,0,0.06)" }}
+        style={{ background: "var(--bg-surface)", borderRight: "1px solid var(--border)" }}
       >
         <SidebarContent />
       </aside>
@@ -1066,7 +1066,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
         {/* Mobile top header */}
         <header
           className="md:hidden flex items-center justify-between px-4 py-3 sticky top-0 z-30"
-          style={{ background: "rgba(255,255,255,0.95)", borderBottom: "1px solid rgba(0,0,0,0.06)", backdropFilter: "saturate(180%) blur(20px)" }}
+          style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)", backdropFilter: "saturate(180%) blur(20px)" }}
         >
           <button
             onClick={() => setDrawerOpen(true)}
@@ -1075,8 +1075,8 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
           >
             <Menu size={20} />
           </button>
-          <div style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.02em", color: "#111827" }}>
-            Boom<span style={{ color: "#ff3c00" }}>Tips25</span>
+          <div style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}>
+            Mike Bills<span style={{ color: "var(--brand)" }}> Predict</span>
           </div>
           <button
             onClick={onLogout}
@@ -1093,7 +1093,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
           <div className="px-4 md:px-8 py-5 md:py-7 max-w-6xl">
             <h1
               className="mb-5 md:mb-6"
-              style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "clamp(1.3rem,4vw,1.8rem)", letterSpacing: "-0.03em", color: "#111827" }}
+              style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "clamp(1.3rem,4vw,1.8rem)", letterSpacing: "-0.03em", color: "var(--text-primary)" }}
             >
               {sectionTitle[section]}
             </h1>
@@ -1106,21 +1106,21 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
         {/* ── Mobile bottom tab bar ── */}
         <nav
           className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex"
-          style={{ background: "rgba(255,255,255,0.97)", borderTop: "1px solid rgba(0,0,0,0.06)", backdropFilter: "saturate(180%) blur(20px)" }}
+          style={{ background: "var(--bg-surface)", borderTop: "1px solid var(--border)", backdropFilter: "saturate(180%) blur(20px)" }}
         >
           {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => goTo(item.id)}
               className="flex-1 flex flex-col items-center justify-center py-3 gap-1 transition-colors"
-              style={{ color: section === item.id ? "#ff3c00" : "#9ca3af" }}
+              style={{ color: section === item.id ? "#6366f1" : "#9ca3af" }}
             >
               <item.icon size={20} />
               <span style={{ fontSize: "10px", fontFamily: "'Sora', sans-serif", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 {item.label === "Manage Slips" ? "Slips" : item.label}
               </span>
               {section === item.id && (
-                <div className="absolute bottom-0 h-0.5 w-10 rounded-full" style={{ background: "#ff3c00" }} />
+                <div className="absolute bottom-0 h-0.5 w-10 rounded-full" style={{ background: "#6366f1" }} />
               )}
             </button>
           ))}
@@ -1137,7 +1137,7 @@ export default function AdminPage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("bt_admin_token");
+    const saved = sessionStorage.getItem("mb_admin_token");
     if (saved) setToken(saved);
     setReady(true);
   }, []);
@@ -1147,7 +1147,7 @@ export default function AdminPage() {
   const handleLogin = (t: string) => setToken(t);
   const handleLogout = () => {
     setToken("");
-    sessionStorage.removeItem("bt_admin_token");
+    sessionStorage.removeItem("mb_admin_token");
     window.location.href = "/";
   };
 

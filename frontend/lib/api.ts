@@ -13,7 +13,10 @@ const api = axios.create({
 export async function getActivePredictions(category?: string): Promise<Prediction[]> {
   const params = category && category !== "all" ? { category } : {};
   const res = await api.get<ApiResponse<Prediction[]>>("/predictions", { params });
-  return res.data.data;
+  return res.data.data.map(p => ({
+    ...p,
+    tips: Array.isArray(p.tips) ? p.tips : (typeof p.tips === 'string' ? JSON.parse(p.tips || '[]') : []),
+  }));
 }
 
 export async function getHistoryPredictions(): Promise<Prediction[]> {
@@ -84,7 +87,10 @@ export async function adminGetPredictions(token: string): Promise<Prediction[]> 
   const res = await api.get<ApiResponse<Prediction[]>>("/admin/predictions", {
     headers: adminHeaders(token),
   });
-  return res.data.data;
+  return res.data.data.map(p => ({
+    ...p,
+    tips: Array.isArray(p.tips) ? p.tips : (typeof p.tips === 'string' ? JSON.parse(p.tips || '[]') : []),
+  }));
 }
 
 export async function adminCreatePrediction(

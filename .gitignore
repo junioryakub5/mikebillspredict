@@ -1,16 +1,33 @@
 # Dependencies
 node_modules/
+
 # Next.js
 frontend/.next/
 frontend/out/
-# Env files (NEVER commit these)
+
+# Env files — NEVER commit secrets
 **/.env
 **/.env.local
 **/.env*.local
+.env*.local
+
+# SQLite database (replaced by Supabase — do not commit)
+**/*.db
+**/*.db-journal
+**/*.db-shm
+**/*.db-wal
+
+# Uploaded files (stored in Supabase Storage)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
 # Logs
 *.log
 npm-debug.log*
+
 # macOS
 .DS_Store
 .vercel
-.env*.local
+
+# Build output
+frontend/tsconfig.tsbuildinfo

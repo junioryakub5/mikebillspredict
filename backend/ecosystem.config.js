@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name        : 'boomtips25-api',
+      name        : 'mikebillspredict-api',
       script      : 'server.js',
       instances   : 1,
       autorestart : true,
@@ -9,7 +9,7 @@ module.exports = {
       max_memory_restart: '512M',
       env: {
         NODE_ENV : 'production',
-        PORT     : 5002,
+        PORT     : 5003,
       },
     },
   ],

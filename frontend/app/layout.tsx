@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
-  title: "BoomTips25 — Premium Football Predictions",
+  title: "Mike Bills Predict — Premium Football Predictions",
   description:
-    "Expert football predictions with guaranteed odds. Unlock premium betting slips with 2+, 5+, 10+ odds. BoomTips25 — bet smarter.",
+    "Expert football predictions with guaranteed odds. Unlock premium betting slips with 2+, 5+, 10+ odds. Mike Bills Predict — bet smarter.",
   keywords:
-    "football predictions, betting tips, soccer predictions, betting odds, premium tips, sports betting",
+    "football predictions, betting tips, soccer predictions, betting odds, premium tips, Mike Bills Predict",
   openGraph: {
-    title: "BoomTips25 — Premium Football Predictions",
+    title: "Mike Bills Predict — Premium Football Predictions",
     description: "Expert football predictions with guaranteed odds.",
     type: "website",
   },
@@ -30,11 +29,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#080c14" />
       </head>
       <body>
         {children}
-        <Analytics />
       </body>
     </html>
   );

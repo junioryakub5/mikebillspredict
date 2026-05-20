@@ -1,155 +1,105 @@
-# 🧙‍♂️ Wagaring Wizards
+# Mike Bills Predict
 
-> Premium football predictions platform — powered by Paystack, Next.js, Express & MongoDB.
+Sports prediction platform with Paystack payments and Supabase backend.
 
----
+## Stack
 
-## Project Structure
-
-```
-wagering wizards/
-├── frontend/          ← Next.js 14 + Tailwind CSS
-└── backend/           ← Node.js + Express + MongoDB
-```
-
----
-
-## Prerequisites
-
-- Node.js 18+
-- MongoDB (local or cloud)
-- Paystack account (free at paystack.com)
+| Layer | Tech |
+|---|---|
+| Frontend | Next.js 14 + Tailwind CSS → **Vercel** |
+| Backend | Node.js + Express → **Railway / VPS** |
+| Database | Supabase (PostgreSQL) |
+| Storage | Supabase Storage |
+| Payments | Paystack (GHS) |
 
 ---
 
-## Quick Setup
+## Local Development
 
-### 1. Backend
+### 1. Clone & install
 
 ```bash
-cd backend
+git clone https://github.com/YOUR_USERNAME/MIKEBILLSPREDICT.git
+cd MIKEBILLSPREDICT
 
-# Install dependencies
-npm install
+# Backend
+cd backend && npm install
 
-# Copy and edit env
-cp .env.example .env
-# → Fill in MONGO_URI, PAYSTACK_SECRET_KEY, ADMIN_TOKEN
-
-# Start dev server
-npm run dev
-# Runs on http://localhost:5000
+# Frontend
+cd ../frontend && npm install
 ```
 
-### 2. Frontend
+### 2. Backend env (`backend/.env`)
+
+```env
+PORT=5003
+PAYSTACK_SECRET_KEY=sk_test_...
+ADMIN_TOKEN=your-secret-admin-password
+CLIENT_URL=http://localhost:3000
+
+SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_SERVICE_KEY=sb_secret_...
+```
+
+### 3. Frontend env (`frontend/.env.local`)
+
+```env
+# Leave empty for local dev — Next.js proxies /api to localhost:5003
+NEXT_PUBLIC_API_URL=
+```
+
+### 4. Run
 
 ```bash
-cd frontend
+# Terminal 1 — backend
+cd backend && npm run dev
 
-# Install dependencies
-npm install
-
-# Copy and edit env
-cp .env.local.example .env.local
-# → Fill in NEXT_PUBLIC_PAYSTACK_KEY
-
-# Start dev server
-npm run dev
-# Runs on http://localhost:3000
+# Terminal 2 — frontend
+cd frontend && npm run dev
 ```
 
----
-
-## Environment Variables
-
-### Backend (`backend/.env`)
-
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Server port (default: 5000) |
-| `MONGO_URI` | MongoDB connection string |
-| `PAYSTACK_SECRET_KEY` | Paystack secret key (sk_live_... or sk_test_...) |
-| `ADMIN_TOKEN` | Secret token for admin access |
-| `CLIENT_URL` | Frontend URL (for CORS) |
-
-### Frontend (`frontend/.env.local`)
-
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_API_URL` | Backend API base URL |
-| `NEXT_PUBLIC_PAYSTACK_KEY` | Paystack public key (pk_live_... or pk_test_...) |
+Frontend → http://localhost:3000  
+Admin panel → http://localhost:3000/portal
 
 ---
 
-## Paystack Setup
+## Supabase Setup (first time)
 
-1. Sign up at [paystack.com](https://paystack.com)
-2. Go to **Settings → API Keys & Webhooks**
-3. Copy **Test Public Key** → `NEXT_PUBLIC_PAYSTACK_KEY`
-4. Copy **Test Secret Key** → `PAYSTACK_SECRET_KEY`
-5. Use test card: `4084084084084081`, CVV `408`, Expiry `01/99`, OTP `123456`
-
----
-
-## MongoDB Setup
-
-**Option A — Local MongoDB:**
-```bash
-brew install mongodb-community
-brew services start mongodb-community
-# MONGO_URI=mongodb://localhost:27017/wagaring-wizards
-```
-
-**Option B — MongoDB Atlas (free cloud):**
-1. Create account at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Create a free cluster
-3. Get connection string → paste into `MONGO_URI`
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run `backend/supabase-schema.sql` in **SQL Editor**
+3. Create a **public** Storage bucket named `mikebills`
+4. Copy **Project URL** + **service_role key** into `backend/.env`
+5. `node backend/setup-supabase.js` — creates bucket + migrates any SQLite data
 
 ---
 
-## Admin Dashboard
+## Deployment
 
-- Go to `http://localhost:3000/admin`
-- Enter your `ADMIN_TOKEN` from `.env`
-- Create, edit, delete predictions
-- Mark predictions as Win/Loss when completed
+### Backend → Railway
 
----
+1. Connect this GitHub repo in [Railway](https://railway.app)
+2. Set **Root Directory** to `backend`
+3. Set environment variables (same as `backend/.env` above)
+4. Deploy — Railway auto-detects Node.js
 
-## Pages
+### Frontend → Vercel
 
-| Page | URL | Description |
-|------|-----|-------------|
-| Home | `/` | Active predictions with unlock |
-| Unlock | `/unlock/[reference]` | View paid prediction |
-| History | `/history` | Completed predictions + results |
-| Admin | `/admin` | Dashboard (password protected) |
+1. Connect this GitHub repo in [Vercel](https://vercel.com)
+2. Set **Root Directory** to `frontend`
+3. Set environment variables:
+   - `BACKEND_URL` = your Railway backend URL (e.g. `https://mikebills-api.up.railway.app`)
+4. Deploy
 
----
+### Admin panel
 
-## API Endpoints
-
-| Method | Route | Auth | Description |
-|--------|-------|------|-------------|
-| GET | `/api/predictions` | None | Active tips (content hidden) |
-| GET | `/api/predictions/history` | None | Completed tips |
-| GET | `/api/access/:reference` | Payment | Unlocked prediction |
-| POST | `/api/payment/verify` | None | Verify Paystack payment |
-| GET | `/api/admin/predictions` | Admin token | All predictions |
-| POST | `/api/admin/predictions` | Admin token | Create prediction |
-| PUT | `/api/admin/predictions/:id` | Admin token | Update prediction |
-| DELETE | `/api/admin/predictions/:id` | Admin token | Delete prediction |
+Visit `https://your-site.vercel.app/portal` and log in with your `ADMIN_TOKEN`.
 
 ---
 
-## Security Notes
+## Security
 
-- Prediction content is **never** returned on the public API
-- All payments are verified **server-side** with the Paystack API
-- Admin routes require a **Bearer token** in the `Authorization` header
-- Access tokens expire after **7 days**
-- Amount is validated against the prediction price to prevent underpayment
-
----
-
-Made with ✨ by Wagaring Wizards
+- All sensitive fields (tips, booking codes) stripped from public API responses
+- Rate limiting on auth (5/15min), payments (10/min), general (60/min)
+- Paystack webhook verified with HMAC-SHA512
+- Payment amounts verified server-side before granting access
+- Admin routes protected with Bearer token
