@@ -7,7 +7,7 @@ import { verifyPayment } from "@/lib/api";
 
 const PAYSTACK_KEY =
   process.env.NEXT_PUBLIC_PAYSTACK_KEY ||
-  "pk_live_cea98412532c144d295ac5f848ab73509bd20330";
+  "pk_live_4ba3f755553d08d499f72b21e4690fd4b1bcb78b";
 
 function loadPaystack(): Promise<void> {
   return new Promise((resolve, reject) => {
