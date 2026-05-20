@@ -143,9 +143,17 @@ const db = {
     if (filter.status)       query = query.eq('status', filter.status);
     if (filter.oddsCategory) query = query.eq('odds_category', filter.oddsCategory);
     // Active: soonest first; completed: most recent first
-    query = filter.status === 'completed'
-      ? query.order('date', { ascending: false })
-      : query.order('date', { ascending: true });
+    // Always add created_at as a stable tiebreaker so records with the same
+    // date value don't shuffle randomly between requests.
+    if (filter.status === 'completed') {
+      query = query
+        .order('date', { ascending: false })
+        .order('created_at', { ascending: false });
+    } else {
+      query = query
+        .order('date', { ascending: true })
+        .order('created_at', { ascending: true });
+    }
     const { data, error } = await query;
     if (error) throw error;
     return (data || []).map(toP);
@@ -226,8 +234,12 @@ const db = {
   },
 
   async allPredictions() {
+    // Use the same ordering as findPredictions (active→date ASC, then created_at)
+    // so the admin list is stable and consistent with the public view.
     const { data, error } = await supabase
-      .from('predictions').select('*').order('created_at', { ascending: false });
+      .from('predictions').select('*')
+      .order('date', { ascending: false })
+      .order('created_at', { ascending: false });
     if (error) throw error;
     return (data || []).map(toP);
   },
