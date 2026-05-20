@@ -975,7 +975,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
       {/* Brand */}
       <div className="px-5 py-5 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <div>
-          <div style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "1.1rem", letterSpacing: "-0.02em", color: "#111827" }}>
+          <div style={{ fontFamily: "'Sora', sans-serif", fontWeight: 700, fontSize: "1.1rem", letterSpacing: "-0.02em", color: "#ffffff" }}>
             Mike Bills<span style={{ color: "#6366f1" }}> Predict</span>
           </div>
           <div className="text-xs mt-0.5" style={{ color: "#9ca3af", fontFamily: "'Sora', sans-serif", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>Admin Panel</div>
