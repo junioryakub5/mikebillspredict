@@ -1133,24 +1133,28 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
 
 // ─── Page Root ────────────────────────────────────────────────────────────────
 export default function AdminPage() {
-  const [token, setToken] = useState("");
-  const [ready, setReady] = useState(false);
+  // Store token + ready as a single atomic state to avoid a race condition
+  // where Dashboard renders briefly with an empty token (causing a 401 on
+  // the first stats/slips request before the sessionStorage value is applied).
+  const [state, setState] = useState<{ token: string; ready: boolean }>(
+    { token: "", ready: false }
+  );
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("mb_admin_token");
-    if (saved) setToken(saved);
-    setReady(true);
+    const saved = sessionStorage.getItem("mb_admin_token") || "";
+    // Single setState call — both values land in the same render.
+    setState({ token: saved, ready: true });
   }, []);
 
-  if (!ready) return <div className="min-h-screen bg-admin-bg" />;
+  if (!state.ready) return <div className="min-h-screen bg-admin-bg" />;
 
-  const handleLogin = (t: string) => setToken(t);
+  const handleLogin = (t: string) => setState({ token: t, ready: true });
   const handleLogout = () => {
-    setToken("");
+    setState({ token: "", ready: true });
     sessionStorage.removeItem("mb_admin_token");
     window.location.href = "/";
   };
 
-  if (!token) return <LoginScreen onLogin={handleLogin} />;
-  return <Dashboard token={token} onLogout={handleLogout} />;
+  if (!state.token) return <LoginScreen onLogin={handleLogin} />;
+  return <Dashboard token={state.token} onLogout={handleLogout} />;
 }
