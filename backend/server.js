@@ -14,10 +14,7 @@ const app  = express();
 const PORT = process.env.PORT || 5001;
 const IS_PROD = process.env.NODE_ENV === 'production';
 
-// Trust two proxy hops (Vercel edge → Nginx → Express) so rate-limit can
-// identify the real user IP from X-Forwarded-For instead of bucketing
-// everyone under Vercel's shared server IPs.
-app.set('trust proxy', 2);
+app.set('trust proxy', true);
 
 // ─── Supabase client ──────────────────────────────────────────────────────────
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -69,38 +66,23 @@ app.use(cors({
 }));
 
 // ─── Security: Rate Limiting ──────────────────────────────────────────────────
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: { error: 'Too many attempts. Try again in 15 minutes.' },
+const limiterDefaults = {
   standardHeaders: true,
-  legacyHeaders: false,
-});
-
-const paymentLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  message: { error: 'Too many payment requests. Please wait a moment.' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-const generalLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 1000,
-  message: { error: 'Rate limit exceeded. Please slow down.' },
-  standardHeaders: true,
-  legacyHeaders: false,
-  skip: (req) => {
-    // Never rate-limit public read endpoints — these are the main page data
-    const p = req.path;
-    return p === '/predictions' || p.startsWith('/predictions/') ||
-           p === '/access' || p.startsWith('/access/') ||
-           p.startsWith('/admin') || p.startsWith('/upload');
+  legacyHeaders:   false,
+  validate:        false,
+  handler: (req, res) => {
+    const resetMs    = req.rateLimit?.resetTime ? req.rateLimit.resetTime - Date.now() : 60000;
+    const retryAfter = Math.max(1, Math.ceil(resetMs / 1000));
+    console.log(`[RATE-LIMIT] ${req.ip} → ${req.method} ${req.path} | limit=${req.rateLimit?.limit} window=${req.rateLimit?.windowMs}ms`);
+    res.setHeader('Retry-After', retryAfter);
+    res.status(429).json({ error: 'Too many requests. Please wait before trying again.', retryAfter });
   },
-});
+};
 
-app.use('/api/', generalLimiter);
+const authLimiter = rateLimit({ ...limiterDefaults, windowMs: 15 * 60 * 1000, max: 10 });
+const paymentLimiter = rateLimit({ ...limiterDefaults, windowMs: 60 * 1000, max: 30 });
+
+// No general rate limiter — public reads need no limiting, admin is token-protected.
 
 // Body parsing — raw body needed for webhook HMAC verification
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
