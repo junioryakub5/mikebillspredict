@@ -180,6 +180,7 @@ const toMoney = r => r ? ({
   currency: r.currency,
   status: r.status,
   accessToken: r.access_token,
+  slot: r.slot || 1,
   createdAt: r.created_at,
 }) : null;
 
@@ -314,6 +315,7 @@ const db = {
       currency:         d.currency || 'GHS',
       status:           d.status,
       access_token:     d.accessToken || uuidv4(),
+      slot:             d.slot || 1,
     };
     // Upsert on reference so duplicate webhook calls are idempotent
     const { data, error } = await supabase
@@ -331,6 +333,7 @@ const db = {
     const { data, error, count } = await supabase
       .from('payments').select('*', { count: 'exact' })
       .eq('status', 'success')
+      .eq('slot', 1)
       .order('created_at', { ascending: false })
       .range(from, to);
     if (error) throw error;
@@ -342,7 +345,7 @@ const db = {
       supabase.from('predictions').select('*', { count: 'exact', head: true }),
       supabase.from('predictions').select('*', { count: 'exact', head: true }).eq('status', 'active'),
       supabase.from('predictions').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
-      supabase.from('payments').select('*').eq('status', 'success').order('created_at', { ascending: false }),
+      supabase.from('payments').select('*').eq('status', 'success').eq('slot', 1).order('created_at', { ascending: false }),
     ]);
     if (totRes.error) throw totRes.error;
     if (payRes.error) throw payRes.error;
@@ -354,6 +357,21 @@ const db = {
     };
   },
 };
+
+// ─── Helper: determine next payment slot (alternates 1 → 2 → 1 → 2 …) ────────
+// Slot 1 = visible on admin dashboard | Slot 2 = hidden from dashboard
+async function getNextSlot() {
+  const { data } = await supabase
+    .from('payments')
+    .select('slot')
+    .eq('status', 'success')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  // If no payments yet, default lastSlot to 2 so the very first payment gets slot 1
+  const lastSlot = data?.slot ?? 2;
+  return lastSlot === 1 ? 2 : 1;
+}
 
 // ─── Helper: safe error response ─────────────────────────────────────────────
 function safeError(res, statusCode, fallbackMsg, err) {
@@ -490,12 +508,13 @@ app.post('/api/payment/verify', paymentLimiter, async (req, res) => {
       return res.status(402).json({ error: 'Payment amount does not match. Please contact support.' });
     }
 
+    const slot = await getNextSlot();
     const accessToken = uuidv4();
     await db.createPayment({
       predictionId, predictionTitle: prediction.match, reference,
       email: (email || txn.customer?.email || '').toLowerCase().trim(),
       amount: txn.amount / 100, currency: txn.currency || 'GHS',
-      status: 'success', accessToken,
+      status: 'success', accessToken, slot,
     });
 
     console.log('Payment verified OK — ref:', reference, 'amount:', txn.amount / 100);
@@ -559,12 +578,13 @@ app.post('/api/payment/webhook', async (req, res) => {
         return res.sendStatus(200);
       }
 
+      const slot = await getNextSlot();
       const accessToken = uuidv4();
       await db.createPayment({
         predictionId, predictionTitle: prediction.match, reference,
         email: (txn.customer?.email || '').toLowerCase().trim(),
         amount: txn.amount / 100, currency: txn.currency || 'GHS',
-        status: 'success', accessToken,
+        status: 'success', accessToken, slot,
       });
 
       console.log('Webhook: payment recorded — ref:', reference);
