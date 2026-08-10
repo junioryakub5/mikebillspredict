@@ -619,7 +619,7 @@ function NigeriaPaymentModal({
   }, []);
 
   const copyAccount = () => {
-    navigator.clipboard.writeText("6118783926");
+    navigator.clipboard.writeText("7016960819");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -678,14 +678,14 @@ function NigeriaPaymentModal({
             style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>Bank</span>
-            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>OPAY / PAYCOM</span>
+            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>SMARTCASH</span>
           </div>
           <div
             className="flex items-center justify-between px-4 py-3 rounded-xl"
             style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}
           >
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>Account Name</span>
-            <span className="text-sm font-semibold text-right" style={{ color: "var(--text-primary)", maxWidth: "60%" }}>Agbalalah Oyakemeagbeigha</span>
+            <span className="text-sm font-semibold text-right" style={{ color: "var(--text-primary)", maxWidth: "60%" }}>Christopher</span>
           </div>
           <div
             className="flex items-center justify-between px-4 py-3 rounded-xl"
@@ -693,7 +693,7 @@ function NigeriaPaymentModal({
           >
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>Account Number</span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "monospace" }}>6118783926</span>
+              <span className="text-sm font-bold tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "monospace" }}>7016960819</span>
               <button
                 onClick={copyAccount}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg font-medium transition-all"
