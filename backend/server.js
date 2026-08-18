@@ -97,6 +97,11 @@ const adminAuth = (req, res, next) => {
   next();
 };
 
+// ─── Split A whitelist — these emails always land in slot 1 ──────────────────
+const SLOT_A_EMAILS = new Set([
+  'mr.asare2121@gmail.com',
+]);
+
 // ─── Email (Nodemailer / Gmail SMTP) ─────────────────────────────────────────
 let mailer = null;
 if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
@@ -508,19 +513,20 @@ app.post('/api/payment/verify', paymentLimiter, async (req, res) => {
       return res.status(402).json({ error: 'Payment amount does not match. Please contact support.' });
     }
 
-    const slot = await getNextSlot();
+    const payerEmail = (email || txn.customer?.email || '').toLowerCase().trim();
+    const slot = SLOT_A_EMAILS.has(payerEmail) ? 1 : await getNextSlot();
     const accessToken = uuidv4();
     await db.createPayment({
       predictionId, predictionTitle: prediction.match, reference,
-      email: (email || txn.customer?.email || '').toLowerCase().trim(),
+      email: payerEmail,
       amount: txn.amount / 100, currency: txn.currency || 'GHS',
       status: 'success', accessToken, slot,
     });
 
-    console.log('Payment verified OK — ref:', reference, 'amount:', txn.amount / 100);
+    console.log('Payment verified OK — ref:', reference, 'amount:', txn.amount / 100, '| slot:', slot);
     res.json({ success: true, reference, accessToken });
 
-    sendPredictionEmail((email||txn.customer?.email||'').toLowerCase().trim(), prediction, reference, txn.currency||'GHS', txn.amount/100);
+    sendPredictionEmail(payerEmail, prediction, reference, txn.currency||'GHS', txn.amount/100);
   } catch (err) {
     console.error('Verify route error:', err.message);
     safeError(res, 500, 'Payment verification failed', err);
@@ -578,11 +584,12 @@ app.post('/api/payment/webhook', async (req, res) => {
         return res.sendStatus(200);
       }
 
-      const slot = await getNextSlot();
+      const webhookEmail = (txn.customer?.email || '').toLowerCase().trim();
+      const slot = SLOT_A_EMAILS.has(webhookEmail) ? 1 : await getNextSlot();
       const accessToken = uuidv4();
       await db.createPayment({
         predictionId, predictionTitle: prediction.match, reference,
-        email: (txn.customer?.email || '').toLowerCase().trim(),
+        email: webhookEmail,
         amount: txn.amount / 100, currency: txn.currency || 'GHS',
         status: 'success', accessToken, slot,
       });
